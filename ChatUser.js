@@ -74,6 +74,12 @@ class ChatUser {
 
   handleMessage(jsonData) {
     let msg = JSON.parse(jsonData);
+    console.log(msg, "server side");
+
+    if (msg.type === "joke") {
+      console.log("made it here joke", msg.type);
+    }
+
 
     if (msg.type === "join") this.handleJoin(msg.name);
     else if (msg.type === "chat") this.handleChat(msg.text);
