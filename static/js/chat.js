@@ -59,12 +59,20 @@ ws.onclose = function (evt) {
 function sendMessage(evt) {
   evt.preventDefault();
   let data = { type: "chat", text: document.querySelector("#m").value };
+  let args = data.text.split(' ')
+  console.log(args, '***args')
+  console.log(data, 'data is ****')
 
   if (data.text === "/joke") {
     data.type = "joke";
   }
   else if (data.text === "/members") {
     data.type = "members";
+  } else if (args[1] === "/priv") {
+    data.type = "private"
+    data.name = args[2]
+    console.log(data.text, 'data.text')
+    data.text = args[3].slice(3)
   }
 
   ws.send(JSON.stringify(data));
