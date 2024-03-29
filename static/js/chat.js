@@ -58,12 +58,12 @@ ws.onclose = function (evt) {
 
 function sendMessage(evt) {
   evt.preventDefault();
-
   let data = { type: "chat", text: document.querySelector("#m").value };
+
   if (data.text === "/joke") {
     data.type = "joke";
   }
-  console.log(data, 'client side****');
+
   ws.send(JSON.stringify(data));
 
   document.querySelector("#m").value = "";
