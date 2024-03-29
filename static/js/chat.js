@@ -63,6 +63,9 @@ function sendMessage(evt) {
   if (data.text === "/joke") {
     data.type = "joke";
   }
+  else if (data.text === "/members") {
+    data.type = "members";
+  }
 
   ws.send(JSON.stringify(data));
 

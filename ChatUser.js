@@ -62,12 +62,29 @@ class ChatUser {
     });
   }
 
+  /** calls get joke fetch. */
 
   async handleJoke() {
     let joke = await ChatUser.getJoke();
 
-    this.send(JSON.stringify({name: "ben", text: joke, type: "chat"}))
+    this.send(JSON.stringify({ name: "ben", text: joke, type: "chat" }));
   }
+
+
+  /** get list of all members in chat room. */
+
+  getUsersInRoom(members) {
+    const memberList = [];
+
+    for (let member of members) {
+      memberList.push(member.name);
+    }
+    let users = memberList.join(', ').slice(0);
+
+    this.send(JSON.stringify({ name: "In room", text: users, type: "chat" }));
+  }
+
+
 
   /** Handle messages from client:
    *
@@ -81,9 +98,10 @@ class ChatUser {
 
   handleMessage(jsonData) {
     let msg = JSON.parse(jsonData);
-    console.log(msg, "server side");
 
-    if (msg.type === "joke") this.handleJoke();
+    if (msg.type === "members") this.getUsersInRoom(this.room.members);
+
+    else if (msg.type === "joke") this.handleJoke();
     else if (msg.type === "join") this.handleJoin(msg.name);
     else if (msg.type === "chat") this.handleChat(msg.text);
     else throw new Error(`bad message: ${msg.type}`);
@@ -92,7 +110,7 @@ class ChatUser {
   /** Get a random joke from joke API */
 
   static async getJoke() {
-    console.log('1234')
+
     const response = await fetch("https://icanhazdadjoke.com/", {
       method: "GET",
       headers: {
@@ -100,7 +118,7 @@ class ChatUser {
       }
     });
     const joke = await response.json();
-    return joke.joke
+    return joke.joke;
   }
 
   /** Connection was closed: leave room, announce exit to others. */
